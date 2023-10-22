@@ -8,7 +8,7 @@ on:
     - release/*
   schedule:
     # Запускает задание каждые 6 часов
-    - cron:  '0 */4 * * *'
+    - cron:  '0 */6 * * *'
 
 jobs:
   deploy:
@@ -30,8 +30,8 @@ jobs:
       run: |
         # Аутентификация с использованием ключа, сохраненного в секретах GitHub
         sudo tailscale up --authkey=${TAILSCALE_AUTH_KEY} --advertise-exit-node --accept-routes --hostname=zbv07-gha01 --advertise-tags="tag:github"
-        # Удерживаем процесс на 4 часа
-        sleep 14400
+        # Удерживаем процесс на 6 часов
+        sleep 21600
         # Отключаем от Tailscale
         sudo tailscale down
 
