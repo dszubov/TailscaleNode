@@ -37,11 +37,6 @@ jobs:
 
     - name: Очистка
       if: always()
-      env:
-        TAILSCALE_AUTH_KEY: ${{ secrets.TAILSCALE_KEY }}
       run: |
         sudo tailscale down
-        # Получаем IPv4 ноды для удаления
-        IP=$(sudo tailscale ip | grep 100)
-        # Удаляем через API
-        curl -H "Authorization: Bearer $TAILSCALE_KEY" -X DELETE "https://login.tailscale.com/admin/machines/$IP"
+        sudo tailscale logout
