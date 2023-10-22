@@ -6,7 +6,7 @@ on:
   push:
     # Автозапуск ноды при изменении этого воркфлоу
     paths:
-      - 'TailscaleNode/.github/workflows/TailscaleExitNode.yml'
+      - 'TailscaleNode/.github/workflows/*'
   schedule:
     # Запускает задание каждые 6 часов
     - cron:  '0 */6 * * *'
