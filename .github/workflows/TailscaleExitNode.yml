@@ -34,12 +34,9 @@ jobs:
         TAILSCALE_AUTH_KEY: ${{ secrets.TAILSCALE_KEY }}
         # Предварительно нужное имя машины нужно добавить в секрет HOSTNAME
         HOSTNAME: ${{ secrets.HOSTNAME }}
-        # Если нужны дополнительные параметры запуска, то также указываем их в серкрете ADVERTISE_TAGS
-        # Посмотреть можно тут: https://tailscale.com/kb/1080/cli/#up
-        ADVERTISE_TAGS: ${{ secrets.ADVERTISE_TAGS }}
       run: |
         # Аутентификация с использованием нашего ключа, сохраненного в секретах GitHub
-        sudo tailscale up --authkey=${TAILSCALE_AUTH_KEY} --advertise-exit-node --accept-routes --hostname=${HOSTNAME} ${ADVERTISE_TAGS}
+        sudo tailscale up --authkey=${TAILSCALE_AUTH_KEY} --advertise-exit-node --accept-routes --hostname=${HOSTNAME}
         # Удерживаем процесс на 6 часов (бесплатный максимум)
         sleep 21600
         # Отключаем от Tailscale
