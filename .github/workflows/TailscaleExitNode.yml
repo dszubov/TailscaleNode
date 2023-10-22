@@ -1,17 +1,19 @@
 name: Tailscale Exit Node
 
 on:
+  # Ручной запуск воркфлоу
   workflow_dispatch:
   push:
-    branches:
-    - main
-    - release/*
+    # Автозапуск ноды при изменении этого воркфлоу
+    paths:
+      - 'TailscaleNode/.github/workflows/TailscaleExitNode.yml'
   schedule:
     # Запускает задание каждые 6 часов
     - cron:  '0 */6 * * *'
 
 jobs:
   deploy:
+    # Запуск на облачной Ubuntu в MS Azure
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -19,18 +21,26 @@ jobs:
 
     - name: Установка Tailscale
       run: |
+        # Выполнение автоустановки по скрипту с "https://tailscale.com/download"
         curl -fsSL https://tailscale.com/install.sh | sh
+        # Включение IPv4-форвардинга для корректной работы Exit-Node согласно "https://tailscale.com/kb/1019/subnets/"
         echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.conf
         echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.conf
         sudo sysctl -p /etc/sysctl.conf
 
     - name: Авторизация в Tailscale и настройка Exit Node
       env:
+        # Предварительно нужно получить токен на "https://login.tailscale.com/admin/settings/keys" и указать его в секрете вашей репы
         TAILSCALE_AUTH_KEY: ${{ secrets.TAILSCALE_KEY }}
+        # Предварительно нужное имя машины нужно добавить в секрет HOSTNAME
+        HOSTNAME: ${{ secrets.HOSTNAME }}
+        # Если нужны дополнительные параметры запуска, то также указываем их в серкрете ADVERTISE_TAGS
+        # Посмотреть можно тут: https://tailscale.com/kb/1080/cli/#up
+        ADVERTISE_TAGS: ${{ secrets.ADVERTISE_TAGS }}
       run: |
-        # Аутентификация с использованием ключа, сохраненного в секретах GitHub
-        sudo tailscale up --authkey=${TAILSCALE_AUTH_KEY} --advertise-exit-node --accept-routes --hostname=zbv07-gha01 --advertise-tags="tag:github"
-        # Удерживаем процесс на 6 часов
+        # Аутентификация с использованием нашего ключа, сохраненного в секретах GitHub
+        sudo tailscale up --authkey=${TAILSCALE_AUTH_KEY} --advertise-exit-node --accept-routes --hostname=${HOSTNAME} ${ADVERTISE_TAGS}
+        # Удерживаем процесс на 6 часов (бесплатный максимум)
         sleep 21600
         # Отключаем от Tailscale
         sudo tailscale down
