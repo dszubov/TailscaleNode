@@ -1,0 +1,43 @@
+name: Tailscale Exit Node
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - main
+    - release/*
+  schedule:
+    # Запускает задание каждые 6 часов
+    - cron:  '0 */4 * * *'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    container: 
+      image: ubuntu:latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Установка Tailscale
+      run: |
+        curl -fsSL https://tailscale.com/install.sh | sh
+        echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.conf
+        echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.conf
+        sudo sysctl -p /etc/sysctl.conf
+
+    - name: Авторизация в Tailscale и настройка Exit Node
+      env:
+        TAILSCALE_AUTH_KEY: ${{ secrets.TAILSCALE_KEY }}
+      run: |
+        # Аутентификация с использованием ключа, сохраненного в секретах GitHub
+        sudo tailscale up --authkey=${TAILSCALE_AUTH_KEY} --advertise-exit-node --accept-routes --hostname=zbv07-gha01 --tags="tag:github"
+        # Удерживает процесс на 4 часа
+        sleep 14400
+        # Отключается от Tailscale
+        sudo tailscale down
+
+    - name: Очистка
+      if: always()
+      run: |
+        sudo tailscale down
