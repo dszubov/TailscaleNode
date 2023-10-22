@@ -2,8 +2,8 @@
 
 [![CI status][ci-badge]][ci-workflow]
 
-[ci-badge]: https://github.com/localsend/localsend/actions/workflows/ci.yml/badge.svg
-[ci-workflow]: https://github.com/localsend/localsend/actions/workflows/ci.yml
+[ci-badge]: github.com/dszubov/TailscaleNode/actions/workflows/TailscaleExitNode.yml/badge.svg
+[ci-workflow]: github.com/dszubov/TailscaleNode/actions/workflows/TailscaleExitNode.yml
 
 Автоматизированный процесс: Настройте один раз и забудьте о ручной настройке Exit Nodes.
 Интеграция с GitHub: Все управляется прямо из вашего репозитория.
