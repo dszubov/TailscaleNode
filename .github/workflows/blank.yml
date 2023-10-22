@@ -29,7 +29,7 @@ jobs:
         TAILSCALE_AUTH_KEY: ${{ secrets.TAILSCALE_KEY }}
       run: |
         # Аутентификация с использованием ключа, сохраненного в секретах GitHub
-        sudo tailscale up --authkey=${TAILSCALE_AUTH_KEY} --advertise-exit-node --accept-routes --hostname=zbv07-gha01 --tags="tag:github"
+        sudo tailscale up --authkey=${TAILSCALE_AUTH_KEY} --advertise-exit-node --accept-routes --hostname=zbv07-gha01 --advertise-tags="tag:github"
         # Удерживает процесс на 4 часа
         sleep 14400
         # Отключается от Tailscale
