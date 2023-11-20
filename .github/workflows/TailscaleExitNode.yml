@@ -27,9 +27,6 @@ jobs:
         echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.conf
         echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.conf
         sudo sysctl -p /etc/sysctl.conf
-        # https://tailscale.com/kb/1320/performance-best-practices/#ethtool-configuration
-        NETDEV=$(ip route show 0/0 | cut -f5 -d' ')
-        sudo ethtool -K $NETDEV rx-udp-gro-forwarding on rx-gro-list off
 
     - name: Авторизация в Tailscale и настройка Exit Node
       env:
