@@ -15,6 +15,7 @@ jobs:
   deploy:
     # Запуск на облачной Ubuntu в MS Azure
     runs-on: ubuntu-latest
+    timeout-minutes: 240
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -38,7 +39,7 @@ jobs:
         # Аутентификация с использованием нашего ключа, сохраненного в секретах GitHub
         sudo tailscale up --authkey=${TAILSCALE_AUTH_KEY} --advertise-exit-node --accept-routes --hostname=${HOSTNAME}
         # Удерживаем процесс на 4 часа (бесплатный максимум)
-        sleep 14340
+        sleep 14400
         # Отключаем от Tailscale
         sudo tailscale down
 
