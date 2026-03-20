@@ -35,10 +35,9 @@ jobs:
         TAILSCALE_AUTH_KEY: ${{ secrets.TAILSCALE_KEY }}
         # Предварительно нужное имя машины нужно добавить в секрет HOSTNAME
         HOSTNAME: ${{ secrets.HOSTNAME }}
-        TAGS: ${{ secrets.TAGS }}
       run: |
         # Аутентификация с использованием нашего ключа, сохраненного в секретах GitHub
-        sudo tailscale up --authkey=${TAILSCALE_AUTH_KEY} --advertise-exit-node --accept-routes --hostname=${HOSTNAME} --advertise-tags=${TAGS}
+        sudo tailscale up --authkey=${TAILSCALE_AUTH_KEY} --advertise-exit-node --accept-routes --hostname=${HOSTNAME}
         # Удерживаем процесс на 4 часа (бесплатный максимум)
         sleep 14400
         # Отключаем от Tailscale
