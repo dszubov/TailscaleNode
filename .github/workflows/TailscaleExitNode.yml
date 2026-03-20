@@ -37,7 +37,7 @@ jobs:
         HOSTNAME: ${{ secrets.HOSTNAME }}
       run: |
         # Аутентификация с использованием нашего ключа, сохраненного в секретах GitHub
-        sudo tailscale up --authkey=${TAILSCALE_AUTH_KEY} --advertise-exit-node --accept-routes --hostname=${HOSTNAME} --advertise-tags:${TAGS}
+        sudo tailscale up --authkey=${TAILSCALE_AUTH_KEY} --advertise-exit-node --accept-routes --hostname=${HOSTNAME} --advertise-tags=${TAGS}
         # Удерживаем процесс на 4 часа (бесплатный максимум)
         sleep 14400
         # Отключаем от Tailscale
